@@ -37,8 +37,12 @@ for o,p in opts:
 # you only need to import the module
 import adba
 
+# lets see the version
+print adba.version
+
 # make a connection object
-connection = adba.Connection()
+# verbos = True great for testing not so great for a running system (default is False)
+connection = adba.Connection(verbos=True)
 
 # we can always ping to see if we can reach the server
 try:
@@ -49,8 +53,11 @@ except Exception,e :
     exit()
 
 
-# ok lets authenticate. we need username and pw for that
-connection.auth(user, pw)
+# ok lets try to authenticate. we need username and pw for that
+try:
+    connection.auth(user, pw)
+except Exception,e :
+    print("exception msg: "+str(e))
 # we create an Episode with:
 # file: path the file we would like to identify
 # paramsF: info we want from the file. for a full list look at adba.maper.aniDBMaper.AniDBMaper.getFileMapF
