@@ -38,7 +38,7 @@ for o,p in opts:
 import adba
 
 # make a connection object
-connection = adba.Connection(clientname='libpyanidb')
+connection = adba.Connection()
 
 # we can always ping to see if we can reach the server
 try:
