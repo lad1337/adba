@@ -20,12 +20,12 @@ from aniDBcommands import *
 from aniDBerrors import *
 from aniDBAbstracter import Anime,Episode
 
-
+version = "1"
 
 class Connection:
-	def __init__(self,clientname='aDBa',clientver='3',server='api.anidb.info',port=9000,myport=9876,user=None,password=None,session=None,dburl=None,verbos=False):
+	def __init__(self,clientname='adba',server='api.anidb.info',port=9000,myport=9876,user=None,password=None,session=None,dburl=None,verbos=False):
 		self.clientname=clientname
-		self.clientver=clientver
+		self.clientver=version
 
 		self.link=AniDBLink(server,port,myport,verbos=verbos)
 		self.link.session=session
