@@ -1,0 +1,14 @@
+
+this is a simple to use anidb interface
+it is based on libpyanidb by alexer !
+more info on his great work can be found here : http://wiki.anidb.net/w/UDP_Clients#libpyanidb
+thank you alexer !
+
+
+
+to start using the module have a look at test.py
+test.py can be called in the command line
+
+e.g. python test.py -u user -p password -f path/to/some/strangeFile.avi
+for further information have a look into test.py
+
