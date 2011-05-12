@@ -90,4 +90,7 @@ if episode.anidb_file_name:
 # we are done we have our info in the episode object so lets logout
 connection.logout()
 
-    
+# the connection has a thread connected to a socket to stop the tread and free the socket we can call
+connection.close()
+# this the socket might not be free right away
+# ps calling connection.logout(True) would achieve the same
