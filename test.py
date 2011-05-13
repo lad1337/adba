@@ -53,9 +53,12 @@ except Exception,e :
     exit()
 
 
+
+
 # ok lets try to authenticate. we need username and pw for that
 try:
     connection.auth(user, pw)
+    pass
 except Exception,e :
     print("exception msg: "+str(e))
 # we create an Episode with:
@@ -67,14 +70,16 @@ episode = adba.Episode(connection,filePath=filePath,
      paramsF=["quality","anidb_file_name","crc32"],
      paramsA=["epno","english_name","other_name"])
 
-# we now got an object that holds the info we have and the info we want
-# lets try get the data from the server
-try:
-    print("Trying to lookup "+str(filePath)+" on anidb")
-    # simply call load_data()
-    episode.load_data()
-except Exception,e :
-    print("exception msg: "+str(e))
+
+if connection.authed():
+    # we now got an object that holds the info we have and the info we want
+    # lets try get the data from the server
+    try:
+        print("Trying to lookup "+str(filePath)+" on anidb")
+        # simply call load_data()
+        episode.load_data()
+    except Exception,e :
+        print("exception msg: "+str(e))
 
 
 # lets see if we got some valid info
