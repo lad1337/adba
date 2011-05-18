@@ -41,8 +41,8 @@ import adba
 print adba.version
 
 # make a connection object
-# verbos = True great for testing not so great for a running system (default is False)
-connection = adba.Connection(verbos=True)
+# log = True great for testing not so great for a running system (default is False)
+connection = adba.Connection(log=True)
 
 # we can always ping to see if we can reach the server
 try:
