@@ -24,6 +24,7 @@ class aniDBabstractObject(object):
     
     def __init__(self,aniDB,load=False):
         self.aniDB = aniDB
+        self.log = self.aniDB.log
         if load:
             self.load_data()
     
@@ -55,14 +56,6 @@ class aniDBabstractObject(object):
             return None
 
     
-
-    def check_last_call(self, last):
-        now = time()
-        if last and now-last > 3:
-            print "sleeping for 3"
-            sleep(3)  
-        return time()
-    
     def load_data(self):
         return False
     
@@ -87,7 +80,6 @@ class Anime(aniDBabstractObject):
         
     def load_data(self):
         """load the data from anidb"""
-        self.lastCommandTime = aniDBabstractObject.check_last_call(self, self.lastCommandTime)
         
         self.rawData = self.aniDB.anime(aid=self.aniDBid,aname=self.name,amask=self.bitCode)
         self._fill(self.rawData.datalines[0])
@@ -111,7 +103,7 @@ class Anime(aniDBabstractObject):
                     
 class Episode(aniDBabstractObject):
     
-    def __init__(self,aniDB,number=None,epid=None,filePath=None,fid=None,epno=None,paramsA=None,paramsF=None,load=False):
+    def __init__(self,aniDB,number=None,epid=None,filePath=None,fid=None,epno=None,paramsA=None,paramsF=None,load=False,calculate=False):
         if not aniDB and not number and not epid and not file and not fid:
             return None
         
@@ -120,6 +112,9 @@ class Episode(aniDBabstractObject):
         self.filePath = filePath
         self.fid = fid
         self.epno = epno
+        if calculate:
+            (self.ed2k, self.size) = self._calculate_file_stuff(self.filePath)
+        
         
         if not paramsA:
             self.bitCodeA = "C000F0C0"
@@ -139,17 +134,36 @@ class Episode(aniDBabstractObject):
         
     def load_data(self):
         """load the data from anidb"""
-        (self.ed2k, self.size) = self._calculate_file_stuff(self.filePath)
-        
-        self.lastCommandTime = aniDBabstractObject.check_last_call(self, self.lastCommandTime)
+        if self.filePath and not (self.ed2k or self.size):
+            (self.ed2k, self.size) = self._calculate_file_stuff(self.filePath)
         
         self.rawData = self.aniDB.file(fid=self.fid,size=self.size,ed2k=self.ed2k,aid=self.aid,aname=None,gid=None,gname=None,epno=self.epno,fmask=self.bitCodeF,amask=self.bitCodeA)
         self._fill(self.rawData.datalines[0])
         
+    def add_to_mylist(self,status=None):
+        """
+        status:
+        0    unknown    - state is unknown or the user doesn't want to provide this information (default)
+        1    on hdd    - the file is stored on hdd
+        2    on cd    - the file is stored on cd
+        3    deleted    - the file has been deleted or is not available for other reasons (i.e. reencoded)
+        
+        """
+        if self.filePath and not (self.ed2k or self.size):
+            (self.ed2k, self.size) = self._calculate_file_stuff(self.filePath)
+            
+        try:
+            self.anidb.mylistadd(size=self.size,ed2k=self.ed2k,state=status)
+        except Exception,e :
+            self.log(u"exception msg: "+str(e))
+        else:
+            # TODO: add the name or something
+            self.log(u"Added the episode to anidb")
     
     def _calculate_file_stuff(self, filePath):
         if not filePath:
             return (None, None)
+        self.log("Calculating the ed2k. Please wait...")
         ed2k = fileInfo.get_file_hash(filePath)
         size = fileInfo.get_file_size(filePath)
         return (ed2k, size)
