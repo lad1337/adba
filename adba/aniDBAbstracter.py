@@ -153,7 +153,7 @@ class Episode(aniDBabstractObject):
             (self.ed2k, self.size) = self._calculate_file_stuff(self.filePath)
             
         try:
-            self.anidb.mylistadd(size=self.size,ed2k=self.ed2k,state=status)
+            self.aniDB.mylistadd(size=self.size,ed2k=self.ed2k,state=status)
         except Exception,e :
             self.log(u"exception msg: "+str(e))
         else:
