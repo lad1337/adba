@@ -54,7 +54,28 @@ class aniDBabstractObject(object):
             return object.__getattribute__(self, name)
         except:
             return None
-
+    
+    def _build_names(self):
+        names = []
+        
+        names.append(self.english_name)
+        
+        names = self._easy_extend(names,self.english_name)
+        names = self._easy_extend(names,self.short_name_list)
+        names = self._easy_extend(names,self.synonym_list)
+        names = self._easy_extend(names,self.other_name)
+            
+        self.allNames = names
+    
+    def _easy_extend(self,initialList,item):
+        if item:
+            if isinstance(item, list):
+                initialList.extend(item)
+            elif isinstance(item, basestring):
+                initialList.append(item)
+            
+        return initialList
+         
     
     def load_data(self):
         return False
@@ -63,8 +84,8 @@ class aniDBabstractObject(object):
     
 class Anime(aniDBabstractObject):
     def __init__(self,aniDB,name=None,aid=None,paramsA=None,load=False):
-        if not name and not aid:
-            raise 
+        if not (name or aid):
+            raise AniDBIncorrectParameterError,"Anime error"
         self.maper = AniDBMaper() 
         self.name = name
         self.aid = aid
@@ -81,10 +102,10 @@ class Anime(aniDBabstractObject):
     def load_data(self):
         """load the data from anidb"""
         
-        self.rawData = self.aniDB.anime(aid=self.aniDBid,aname=self.name,amask=self.bitCode)
+        self.rawData = self.aniDB.anime(aid=self.aid,aname=self.name,amask=self.bitCode)
         self._fill(self.rawData.datalines[0])
         self._builPreSequal()
-        
+
         
     def _builPreSequal(self):
         if self.related_aid_list and self.related_aid_type:
@@ -139,6 +160,7 @@ class Episode(aniDBabstractObject):
         
         self.rawData = self.aniDB.file(fid=self.fid,size=self.size,ed2k=self.ed2k,aid=self.aid,aname=None,gid=None,gname=None,epno=self.epno,fmask=self.bitCodeF,amask=self.bitCodeA)
         self._fill(self.rawData.datalines[0])
+        self._build_names()
         
     def add_to_mylist(self,status=None):
         """
