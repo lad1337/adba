@@ -68,7 +68,7 @@ except Exception,e :
 # for all params: the order is irrelevant
 episode = adba.Episode(connection,filePath=filePath,
      paramsF=["quality","anidb_file_name","crc32"],
-     paramsA=["epno","english_name","other_name"])
+     paramsA=["epno","english_name","other_name","short_name_list","synonym_list"])
 
 
 if connection.authed():
@@ -91,6 +91,12 @@ if connection.authed():
 if episode.anidb_file_name:
     # every data should be in the correct type ... list are list numbers are int and so on
     print("Lookup successful, the anidb filename is: "+str(episode.anidb_file_name))
+
+# allNames is set during load_data() this is a list with all names you wanted to get
+# for a episode these are the anime names !!
+if episode.allNames:
+    print("All names we collected: "+str(episode.allNames))
+
 
 # we are done we have our info in the episode object so lets logout
 connection.logout()
