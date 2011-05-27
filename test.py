@@ -95,7 +95,8 @@ if episode.anidb_file_name:
 # allNames is set during load_data() this is a list with all names you wanted to get
 # for a episode these are the anime names !!
 if episode.allNames:
-    print("All names we collected: "+str(episode.allNames))
+    for name in episode.allNames:
+        print u"-: "+name
 
 
 # we are done we have our info in the episode object so lets logout
