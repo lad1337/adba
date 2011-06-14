@@ -17,19 +17,7 @@
 import sys
 import os
 import getopt
-
-opts, extraparams = getopt.getopt(sys.argv[1:],'u:p:f:') 
-user = ""
-pw = ""
-filePath = ""
-
-for o,p in opts:
-    if o == '-u':
-        user = p
-    elif o == '-p':
-        pw = p
-    elif o == '-f':
-        filePath = os.path.abspath(p)
+from test_lib import *
 ####################################################
 # here starts the stuff that is interresting for you
 ####################################################
@@ -67,7 +55,7 @@ except Exception,e :
 # paramsA: info we want from the anime. for a full list look at adba.maper.aniDBMaper.AniDBMaper.getFileMapA
 # for all params: the order is irrelevant
 episode = adba.Episode(connection,filePath=filePath,
-     paramsF=["quality","anidb_file_name","crc32"],
+     paramsF=["quality","anidb_file_name","crc32","gid"],
      paramsA=["epno","english_name","other_name","short_name_list","synonym_list"])
 
 

@@ -17,19 +17,7 @@
 import sys
 import os
 import getopt
-
-opts, extraparams = getopt.getopt(sys.argv[1:],'u:p:f:') 
-user = ""
-pw = ""
-filePath = ""
-
-for o,p in opts:
-    if o == '-u':
-        user = p
-    elif o == '-p':
-        pw = p
-    elif o == '-f':
-        filePath = os.path.abspath(p)
+from test_lib import *
 ####################################################
 # here starts the stuff that is interesting for you
 ####################################################
@@ -39,17 +27,6 @@ import adba
 import threading
 from time import time,sleep,strftime,localtime
 
-def beep():
-    f=open('/dev/tty','w') 
-    f.write(chr(7)) 
-    f.close() 
-
-def getNowString():
-    return strftime("%Y-%m-%d %H:%M:%S", localtime(time())) 
-
-def log_function(data,logLvl="INFO"):
-    print(getNowString()+"-"+str(logLvl)+": "+str(data))
-logwrapper = lambda x :log_function("anidb: "+str(x),"DEBUG")
 
 # lets see the version
 print("version: "+str(adba.version))
