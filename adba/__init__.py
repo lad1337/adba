@@ -213,6 +213,24 @@ class Connection(threading.Thread):
 		"""
 		return self.handle(PushAckCommand(nid),callback)
 
+	def notifyadd(self,aid=None,gid=None,type=None,priority=None,callback=None):
+		"""
+		Add a notification
+		
+		parameters:
+		aid	- Anime id
+		gid - Group id
+		type - Type of notification: type=>  0=all, 1=new, 2=group, 3=complete
+		priority - low = 0, medium = 1, high = 2 (unconfirmed)
+		
+		structure of parameters:
+		[aid={int}|gid={int}]&type={int}&priority={int}
+		
+		"""
+		
+		return self.handle(NotifyAddCommand(aid,gid,type,priority),callback)
+		
+	
 	def notify(self,buddy=None,callback=None):
 		"""
 		Get number of pending notifications and messages

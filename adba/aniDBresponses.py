@@ -684,6 +684,38 @@ class VoteRevokedResponse(Response):
 		self.codetail=('name', 'value')
 		self.coderep=()
 
+
+
+class NotificationAddedResponse(Response):
+	def __init__(self,cmd,restag,rescode,resstr,datalines):
+		"""
+		attributes:
+
+		data: 
+		nid - notofication id
+
+		"""
+		Response.__init__(self,cmd,restag,rescode,resstr,datalines)
+		self.codestr='NOTIFICATION_ITEM_ADDED'
+		self.codehead=()
+		self.codetail=('nid')
+		self.coderep=()
+
+class NotificationUpdatedResponse(Response):
+	def __init__(self,cmd,restag,rescode,resstr,datalines):
+		"""
+		attributes:
+
+		data: 
+		nid - notofication id
+
+		"""
+		Response.__init__(self,cmd,restag,rescode,resstr,datalines)
+		self.codestr='NOTIFICATION_ITEM_UPDATED'
+		self.codehead=()
+		self.codetail=('nid')
+		self.coderep=()
+
 class NotificationEnabledResponse(Response):
 	def __init__(self,cmd,restag,rescode,resstr,datalines):
 		"""
@@ -1396,6 +1428,20 @@ class NoSuchUserResponse(Response):
 		self.codetail=()
 		self.coderep=()
 
+class NoChanges(Response):
+	def __init__(self,cmd,restag,rescode,resstr,datalines):
+		"""
+		attributes:
+
+		data:
+
+		"""
+		Response.__init__(self,cmd,restag,rescode,resstr,datalines)
+		self.codestr='NO_CHANGES'
+		self.codehead=()
+		self.codetail=()
+		self.coderep=()
+
 class NotLoggedInResponse(Response):
 	def __init__(self,cmd,restag,rescode,resstr,datalines):
 		"""
@@ -1685,6 +1731,8 @@ responses={
 	'232':RandomanimeResponse,
 	'240':EpisodeResponse,
 	'245':ProducerResponse,
+	'246':NotificationAddedResponse,
+	'248':NotificationUpdatedResponse,
 	'250':GroupResponse,
 	'253':BuddyListResponse,
 	'254':BuddyStateResponse,
@@ -1743,6 +1791,7 @@ responses={
 	'392':NoSuchMessageResponse,
 	'393':NoSuchNotifyResponse,
 	'394':NoSuchUserResponse,
+	'399':NoChanges,
 	'403':NotLoggedInResponse,
 	'410':NoSuchMylistFileResponse,
 	'411':NoSuchMylistEntryResponse,

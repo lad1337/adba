@@ -95,6 +95,13 @@ class PushAckCommand(Command):
 		parameters={'nid':nid}
 		Command.__init__(self,'PUSHACK',**parameters)
 
+class NotifyAddCommand(Command):
+	def __init__(self,aid=None,gid=None,type=None,priority=None):
+		if not (aid or gid) or (aid and gid):
+			raise AniDBIncorrectParameterError,"You must provide aid OR gid for NOTIFICATIONADD command"
+		parameters={'aid':aid,"gid":gid,"type":type,"priority":priority}
+		Command.__init__(self,'NOTIFICATIONADD',**parameters)
+		
 class NotifyCommand(Command):
 	def __init__(self,buddy=None):
 		parameters={'buddy':buddy}
