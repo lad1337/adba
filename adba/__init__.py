@@ -500,6 +500,22 @@ class Connection(threading.Thread):
 		"""
 		return self.handle(GroupCommand(gid,gname),callback)
 	
+	def groupstatus(self,aid=None,state=None,callback=None):
+		"""
+		Returns a list of group names and ranges of episodes released by the group for a given anime.
+		parameters:
+		aid	- anime id
+		state - If state is not supplied, groups with a completion state of 'ongoing', 'finished', or 'complete' are returned
+			state values:
+				1 -> ongoing
+				2 -> stalled
+				3 -> complete
+				4 -> dropped
+				5 -> finished
+				6 -> specials only
+		"""
+		return self.handle(GroupstatusCommand(aid,state),callback)
+	
 	def producer(self,pid=None,pname=None,callback=None):
 		"""
 		Get information about a producer

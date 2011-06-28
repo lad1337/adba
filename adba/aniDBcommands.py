@@ -182,6 +182,13 @@ class GroupCommand(Command):
 		parameters={'gid':gid,'gname':gname}
 		Command.__init__(self,'GROUP',**parameters)
 
+class GroupstatusCommand(Command):
+	def __init__(self,aid=None,status=None):
+		if not aid:
+			raise AniDBIncorrectParameterError,"You must provide aid for GROUPSTATUS command"
+		parameters={'aid':aid,'status':status}
+		Command.__init__(self,'GROUPSTATUS',**parameters)
+
 class ProducerCommand(Command):
 	def __init__(self,pid=None,pname=None):
 		if not (pid or pname) or (pid and pname):
