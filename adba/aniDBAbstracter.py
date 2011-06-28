@@ -113,7 +113,14 @@ class Anime(aniDBabstractObject):
         self._fill(self.rawData.datalines[0])
         self._builPreSequal()
         self.laoded = True
-        
+    
+    def get_groups(self):
+        self.rawData = self.aniDB.groupstatus(aid=self.aid)
+        self.release_groups = []
+        for line in self.rawData.datalines:
+            self.release_groups.append(unicode(line["name"], "utf-8"))
+        return self.release_groups
+    
     def _builPreSequal(self):
         if self.related_aid_list and self.related_aid_type:
             try:
