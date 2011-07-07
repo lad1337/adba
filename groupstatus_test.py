@@ -47,8 +47,11 @@ try:
 except Exception,e :
     print("exception msg: "+str(e))
 
+animeList =  ["Bleach", "Naruto Shippuuden", "Blue Exorcist"]
+animeList =  ["sdadasda"]
 
-for animeName in ["Bleach", "Naruto Shippuuden", "Blue Exorcist"]:
+
+for animeName in animeList:
     print("########################### "+animeName+" ###########################")
     anime = adba.Anime(connection,name=animeName,paramsA=['aid'],load=True)
     groups = anime.get_groups()
