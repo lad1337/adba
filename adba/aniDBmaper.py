@@ -55,7 +55,7 @@ class AniDBMaper:
             if field in wanted and not field in self.blacklist:
                 bit = bit ^ (1<<len(map)-index-1)
                 
-        bit = str(hex(bit)).lstrip("0x")
+        bit = str(hex(bit)).lstrip("0x").rstrip("L")
         bit = ''.join(["0" for unused in xrange(len(map)/4 - len(bit))])+bit
         return bit
     
