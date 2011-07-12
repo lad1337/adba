@@ -18,7 +18,7 @@
 from time import time,sleep
 import aniDBfileInfo as fileInfo
 import xml.etree.cElementTree as etree
-import os
+import os, re, string
 from aniDBmaper import AniDBMaper
 
 
@@ -101,7 +101,7 @@ class aniDBabstractObject(object):
     
     
 class Anime(aniDBabstractObject):
-    def __init__(self,aniDB,name=None,aid=None,paramsA=None,load=False):
+    def __init__(self,aniDB,name=None,aid=None,paramsA=None,autoCorrectName=False,load=False):
         if not (name or aid):
             raise AniDBIncorrectParameterError,"Anime error"
         self.maper = AniDBMaper()
@@ -110,7 +110,7 @@ class Anime(aniDBabstractObject):
         self.aid = aid
         if not self.aid:
             self.aid = self._get_aid_from_xml(self.name)
-        if not self.name:
+        if not self.name or autoCorrectName:
             self.name = self._get_name_from_xml(self.aid)
             
         
@@ -145,13 +145,16 @@ class Anime(aniDBabstractObject):
         if not self.allAnimeXML:
             self.allAnimeXML = self._read_animetitels_xml()
     
-        name = name.lower()
+        regex = re.compile('[%s]' % re.escape(string.punctuation))
+        name = regex.sub('', name.lower())
         lastAid = 0
         for element in self.allAnimeXML.iter():
             if element.get("aid",False):
                 lastAid = int(element.get("aid"))
-            if element.text and element.text.lower() == name:
-                return lastAid
+            if element.text:
+                testname = regex.sub('', element.text.lower())
+                if testname == name:
+                    return lastAid
         return 0
     
     def _get_name_from_xml(self,aid,onlyMain=True):
