@@ -28,6 +28,18 @@ import adba
 # lets see the version
 print adba.version
 
+# you can now get the aid / name without a connection
+# this will search the animetitles.xml that comes with this package
+# to be precise every new Anime obj will load these before a lookup on anidb 
+anime = adba.Anime(None,name="Bleach")
+print(str(anime.aid))
+
+anime = adba.Anime(None,aid=2369)
+print(str(anime.name))
+# if you want to use the anime object later with a connection you can use
+# anime.set_connection(connection)
+
+
 # make a connection object
 # log = True great for testing not so great for a running system (default is False)
 connection = adba.Connection(log=True)
@@ -39,8 +51,6 @@ except Exception,e :
     print("exception msg: "+str(e))
     print "if we cant even ping stop right here"
     exit()
-
-
 
 
 # ok lets try to authenticate. we need username and pw for that
