@@ -26,20 +26,24 @@ from test_lib import *
 import adba
 
 # lets see the version
-print adba.version
+print "Version:",adba.version
 
 # you can now get the aid / name without a connection
 # this will search the animetitles.xml that comes with this package
 # to be precise every new Anime obj will load these before a lookup on anidb 
 anime = adba.Anime(None,name="Bleach")
-print(str(anime.aid))
+print("anidbid from name: "+str(anime.aid))
 
 anime = adba.Anime(None,aid=2369)
-print(str(anime.name))
+print("name from anidbid: "+str(anime.name))
+
+anime = adba.Anime(None,tvdbid=236061,name="X-Men (2011)",autoCorrectName=True)
+print("name from tvdbid or name: "+str(anime.name))
 # if you want to use the anime object later with a connection you can use
 # anime.set_connection(connection)
 
 
+exit()
 # make a connection object
 # log = True great for testing not so great for a running system (default is False)
 connection = adba.Connection(log=True)
@@ -59,6 +63,12 @@ try:
     pass
 except Exception,e :
     print("exception msg: "+str(e))
+    
+group = connection.group(gname="Doki Fansubs")
+for line in group.datalines:
+    print line["shortname"]
+
+
 # we create an Episode with:
 # file: path the file we would like to identify
 # paramsF: info we want from the file. for a full list look at adba.maper.aniDBMaper.AniDBMaper.getFileMapF
