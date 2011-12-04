@@ -25,76 +25,89 @@ from test_lib import *
 # you only need to import the module
 import adba
 import threading
-from time import time,sleep,strftime,localtime
+from time import time, sleep, strftime, localtime
 
 
 # lets see the version
-print("version: "+str(adba.version))
-connection = adba.Connection(log=logwrapper,keepAlive=True)
+print("version: " + str(adba.version))
+connection = adba.Connection(log=logwrapper, keepAlive=True)
 
 
 class ThreadLookUp(threading.Thread):
-    
-    def __init__(self,animeName):
+
+    def __init__(self, animeName, index):
         super(ThreadLookUp, self).__init__()
         self.animeName = animeName
-        self.name = "Thread - "+str(self.animeName)
-        print(self.name+" started")
-    
+        self.name = "Thread - " + str(self.animeName) + " - " + str(index)
+        print(self.name + " started")
+
     def run(self):
         if not connection.authed():
-            log_function("authenticating in thread: "+self.getName())
+            log_function("authenticating in thread: " + self.getName())
             if(user and pw):
                 connection.auth(user, pw)
         else:
-            log_function("no need to authenticate some one else did it")
-        
+            log_function(self.name + "no need to authenticate some one else did it")
+
         if(self.animeName != ""):
-            anime = adba.Anime(connection,name=self.animeName,paramsA=['aid'])
+            anime = adba.Anime(connection, name=self.animeName, paramsA=['aid'])
             anime.load_data()
-            log_function("the id to "+self.animeName+" is "+str(anime.aid))
+            log_function("the id to " + self.animeName + " is " + str(anime.aid))
         else:
-            log_function("not looking up anything you gave me no anime name");
+            log_function("not looking up anything you gave me no anime name")
 
+sleepTime = 0
+threadCount = 3 # this one(none demon), the link that holds the socket(demon) and the connection if keept alive (demon)
+print("#####################################")
+print("STRESS TEST !!!!1")
+print("#####################################")
 
+print("#####################################")
+print("Block ONE 8 Threads")
+print("#####################################")
 
-ThreadLookUp("One Piece").start()
-#ThreadLookUp("Bleach").start()
-log_function("sleeping 4 min...")
-sleep((60*4)+30)
-connection.logout() 
-connection.lastAuth = time()-1801
-connection._keep_alive()
+for x in range(2):
+    for a in ["one piece", "bleach", "Cowboy Bebop", "Usagi Drop"]:
+        ThreadLookUp(a, x).start()
 
-
-log_function("sleeping 10 min...")
-sleep(60*10)
-beep()
-log_function("sleeping another 10 min...")
-sleep(60*10)
-
-beep()
-beep()
-log_function("checking connection after 20 min")
-log_function("connection status: "+str(connection.authed()))
-
-log_function("sleeping another 10 min...")
-sleep(60*10)
+while threading.activeCount() > threadCount:
+    print "running", threading.activeCount()
+    sleep(3)
 
 beep()
 beep()
+print("#####################################")
+print("Wait 3 min. we should see some auto checks / pings")
+print("#####################################")
+sleep(60*3)
 beep()
-log_function("checking connection after 30 min")
-log_function("connection status: "+str(connection.authed()))
-log_function("sleeping another 10 min...")
-sleep(60*10)
+beep()
+print("#####################################")
+print("Breaking the session")
+print("#####################################")
+connection.link.session = None
 
-beep()
-beep()
-beep()
-beep()
-print(getNowString()+": checking connection after 40 min")
-print(getNowString()+": connection status: "+str(connection.authed()))
+print("#####################################")
+print("Block TWO 8 Threads")
+print("#####################################")
 
-print("checking connection with a real request...")
-ThreadLookUp("Bleach").start()
+for x in range(2):
+    for a in ["one piece", "bleach", "Cowboy Bebop", "Usagi Drop"]:
+        ThreadLookUp(a, x).start()
+
+while threading.activeCount() > threadCount:
+    print "running", threading.activeCount()
+    if threading.activeCount() < threadCount + 3:
+        print("#####################################")
+        print("Just for the hell of it authenticate while some threads run")
+        print("#####################################")
+        connection.auth(user, pw)
+    sleep(3)
+
+
+print("final logout: " + str(connection.logout()))
+print("#####################################")
+print("Thank you! Thread / Stress completed!")
+print("#####################################")
+
+exit()

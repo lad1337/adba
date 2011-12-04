@@ -35,8 +35,8 @@ connection = adba.Connection(log=True)
 # we can always ping to see if we can reach the server
 try:
     connection.ping()
-except Exception,e :
-    print("exception msg: "+str(e))
+except Exception, e :
+    print("exception msg: " + str(e))
     print "if we cant even ping stop right here"
     exit()
 
@@ -44,17 +44,17 @@ except Exception,e :
 try:
     connection.auth(user, pw)
     pass
-except Exception,e :
-    print("exception msg: "+str(e))
+except Exception, e :
+    print("exception msg: " + str(e))
 
-animeList =  ["Bleach", "Naruto Shippuuden", "Blue Exorcist"]
-animeList =  ["sdadasda"]
+animeList = ["Bleach", "Naruto Shippuuden", "Blue Exorcist"]
 
 
 for animeName in animeList:
-    print("########################### "+animeName+" ###########################")
-    anime = adba.Anime(connection,name=animeName,paramsA=['aid'],load=True)
+    print("########################### " + animeName + " ###########################")
+    anime = adba.Anime(connection, name=animeName, paramsA=['aid'], load=True)
     groups = anime.get_groups()
     for group in groups:
-        print(u"- "+group)
+        print(u"- " + str(group))
 
+connection.logout()
